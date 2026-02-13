@@ -11,6 +11,12 @@ DEVICE_PACKAGE_OVERLAYS += \
 
 PRODUCT_ENFORCE_RRO_TARGETS := *
 
+# Android 16 QPR1 Common Properties
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.material.expressive.enabled=true \
+    ro.desktop.mode.enabled=true \
+    persist.wm.extensions.enabled=true
+
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
@@ -58,6 +64,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.sip.voip.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/android.software.verified_boot.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.verified_boot.xml \
     frameworks/native/data/etc/android.software.vulkan.deqp.level-2020-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
+    frameworks/native/data/etc/android.software.freeform_window_management.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.freeform_window_management.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml
 
 # Audio
