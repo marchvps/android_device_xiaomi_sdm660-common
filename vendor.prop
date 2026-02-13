@@ -3,7 +3,7 @@ af.fast_track_multiplier=1
 vendor.audio_hal.period_size=240
 ro.vendor.audio.sdk.fluencetype=fluence
 persist.vendor.audio.fluence.voicecall=true
-persist.vendor.audio.fluence.voicerec=false
+persist.vendor.audio.fluence.voicerec=true
 persist.vendor.audio.fluence.speaker=true
 vendor.audio.tunnel.encode=false
 persist.vendor.audio.ras.enabled=false
@@ -43,7 +43,7 @@ vendor.audio.feature.concurrent_capture.enable=false
 vendor.audio.feature.custom_stereo.enable=true
 vendor.audio.feature.display_port.enable=true
 vendor.audio.feature.dsm_feedback.enable=false
-vendor.audio.feature.dynamic_ecns.enable=false
+vendor.audio.feature.dynamic_ecns.enable=true
 vendor.audio.feature.ext_hw_plugin.enable=false
 vendor.audio.feature.external_dsp.enable=false
 vendor.audio.feature.external_speaker.enable=false
@@ -77,6 +77,13 @@ vendor.audio.feature.snd_mon.enable=true
 ro.config.media_vol_steps=25
 ro.config.vc_call_vol_steps=7
 vendor.audio.adm.buffering.ms=6
+vendor.audio.enable.mirrorlink=false
+persist.vendor.audio.speaker.prot.enable=false
+persist.vendor.audio.avs.afe_api_version=2
+
+# Audio - Echo cancellation improvements
+audio.offload.disable=false
+persist.vendor.audio.voicecall.speaker.stereo=true
 
 # Bluetooth
 bluetooth.device.class_of_device=90,2,12
