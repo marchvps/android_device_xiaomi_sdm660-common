@@ -103,10 +103,6 @@ PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
     frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml
 
-# ANT+
-PRODUCT_PACKAGES += \
-    AntHalService-Soong
-
 # Bluetooth
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.0 \
@@ -117,26 +113,19 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.frameworks.sensorservice@1.0 \
     android.frameworks.sensorservice@1.0.vendor \
-    android.frameworks.displayservice@1.0_32 \
-    android.frameworks.displayservice@1.0.vendor \
     android.hardware.camera.device@3.4:64 \
     android.hardware.camera.device@3.5:64 \
     android.hardware.camera.provider@2.4:64 \
-    android.hardware.camera.provider@2.4-impl:32 \
-    android.hardware.camera.provider@2.4-service \
+    android.hardware.camera.provider-service_32.lineage \
     android.hardware.camera.provider@2.5:64 \
     android.hardware.camera.provider@2.6:64 \
     libdng_sdk.vendor \
     vendor.qti.hardware.camera.device@1.0:64
 
-# Configstore
-PRODUCT_PACKAGES += \
-    disable_configstore
-
 # ConsumerIR
 ifeq ($(BOARD_HAVE_IR),true)
 PRODUCT_PACKAGES += \
-    android.hardware.ir-service.xiaomi
+    android.hardware.ir-service.lineage
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.consumerir.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.consumerir.xml
@@ -157,15 +146,18 @@ PRODUCT_PACKAGES += \
     libqdMetaData.system
 
 PRODUCT_PACKAGES += \
-    android.frameworks.displayservice@1.0_32 \
-    android.frameworks.displayservice@1.0.vendor \
-    android.hardware.graphics.allocator@2.0-impl:64 \
-    android.hardware.graphics.allocator@2.0-service \
-    android.hardware.graphics.mapper@2.0-impl-2.1 \
     android.hardware.graphics.composer@2.1-service \
-    android.frameworks.displayservice@1.0 \
+    android.hardware.graphics.mapper@3.0-impl-qti-display \
+    android.hardware.graphics.mapper@4.0-impl-qti-display \
     vendor.display.config@1.1 \
+    vendor.qti.hardware.display.allocator-service \
     vendor.qti.hardware.memtrack-service
+
+# Display service (needed by the camera blobs)
+PRODUCT_PACKAGES += \
+    lineage.frameworks.displayservice@1.0.vendor
+
+$(call soong_config_set_bool,surfaceflinger,register_displayservice,true)
 
 # Doze
 PRODUCT_PACKAGES += \
@@ -200,9 +192,9 @@ PRODUCT_PACKAGES += \
     libvndfwk_detect_jni.qti \
     libvndfwk_detect_jni.qti.vendor
 
-# Gatekeeper (AIDL)
+# Gatekeeper
 PRODUCT_PACKAGES += \
-    android.hardware.gatekeeper-service.default \
+    android.hardware.gatekeeper@1.0.vendor \
     libion.vendor
 
 # GPS
@@ -214,11 +206,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.health-service.qti \
     android.hardware.health-service.qti_recovery
-
-ifneq ($(AB_OTA_UPDATER),true)
-PRODUCT_PACKAGES += \
-    android.hardware.health@2.1-impl.recovery
-endif
 
 # HIDL
 PRODUCT_PACKAGES += \
@@ -241,6 +228,8 @@ PRODUCT_PACKAGES += \
     IFAAService
 
 # Init
+$(call soong_config_set,libinit,vendor_init_lib,//$(LOCAL_PATH):libinit_sdm660)
+
 PRODUCT_PACKAGES += \
     init.class_main.sh \
     init.msm.usb.configfs.rc \
@@ -262,6 +251,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sec_config:$(TARGET_COPY_OUT_VENDOR)/etc/sec_config
 
+# ION
+$(call soong_config_set_bool,libion,legacy_impl,true)
+
 # Kernel
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 PRODUCT_ENABLE_UFFD_GC := false
@@ -271,11 +263,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/uinput-fpc.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/uinput-fpc.kl \
     $(LOCAL_PATH)/keylayout/uinput-goodix.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/uinput-goodix.kl
 
-# Keymaster / KeyMint (AIDL)
+# Keymaster
 PRODUCT_PACKAGES += \
-    android.hardware.security.keymint-service \
-    android.hardware.security.sharedsecret-service \
-    android.hardware.security.secureclock-service \
     android.hardware.keymaster@4.0.vendor
 
 # Lights
@@ -288,8 +277,9 @@ PRODUCT_PACKAGES += \
 
 # LiveDisplay native
 PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay@2.0-service-sdm \
-    vendor.lineage.livedisplay@2.0-service-sysfs
+    vendor.lineage.livedisplay-service.sdm
+
+$(call soong_config_set_bool,livedisplay_sdm,enable_dm,false)
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -408,7 +398,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libutils-v33
 
-# Wifi (AIDL)
+# Wifi
 PRODUCT_PACKAGES += \
     android.hardware.wifi-service \
     hostapd \

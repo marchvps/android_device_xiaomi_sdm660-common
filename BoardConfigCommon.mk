@@ -8,10 +8,6 @@ BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 ALLOW_MISSING_DEPENDENCIES := true
 BUILD_BROKEN_MISSING_REQUIRED_MODULES := true
 
-# Android 16 specific flags
-TARGET_ENFORCES_EDGE_TO_EDGE := true
-
-
 COMMON_PATH := device/xiaomi/sdm660-common
 
 # Bootloader
@@ -20,6 +16,7 @@ TARGET_NO_BOOTLOADER := true
 
 # Platform
 TARGET_BOARD_PLATFORM := sdm660
+TARGET_ENFORCES_QSSI := true
 
 # Architecture
 TARGET_ARCH := arm64
@@ -44,15 +41,13 @@ BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 TARGET_KERNEL_SOURCE := kernel/xiaomi/sdm660
+TARGET_KERNEL_VERSION := 4.19
 
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
 
 # A/B
 AB_OTA_UPDATER := false
-
-# ANT+
-BOARD_ANT_WIRELESS_DEVICE := "qualcomm-hidl"
 
 # Audio
 BOARD_USES_ALSA_AUDIO := true
@@ -64,6 +59,11 @@ AUDIO_FEATURE_ENABLED_EXT_AMPLIFIER := false
 
 # Camera
 TARGET_USES_QTI_CAMERA_DEVICE := true
+
+# Display
+TARGET_USES_GRALLOC4 := true
+TARGET_USES_QTI_MAPPER_2_0 := true
+TARGET_USES_QTI_MAPPER_EXTENSIONS_1_1 := true
 
 # DT2W
 TARGET_TAP_TO_WAKE_NODE := "/sys/touchpanel/double_tap"
@@ -78,8 +78,7 @@ endif
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
     hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml \
     hardware/qcom-caf/common/vendor_framework_compatibility_matrix_legacy.xml \
-    hardware/xiaomi/vintf/xiaomi_framework_compatibility_matrix.xml \
-    vendor/lineage/config/device_framework_matrix.xml
+    hardware/xiaomi/vintf/xiaomi_framework_compatibility_matrix.xml
 DEVICE_MANIFEST_FILE := $(COMMON_PATH)/manifest.xml
 ifeq ($(filter clover,$(TARGET_DEVICE)),)
 DEVICE_MANIFEST_FILE += $(COMMON_PATH)/manifest-ds.xml
@@ -89,7 +88,6 @@ endif
 DEVICE_MATRIX_FILE := hardware/qcom-caf/common/compatibility_matrix.xml
 
 # Init
-TARGET_INIT_VENDOR_LIB := //$(COMMON_PATH):libinit_sdm660
 TARGET_RECOVERY_DEVICE_MODULES := libinit_sdm660
 
 # Media
@@ -156,13 +154,13 @@ TARGET_VENDOR_PROP += $(COMMON_PATH)/vendor-dsds.prop
 endif
 
 # SELinux
+include device/lineage/sepolicy/libion/sepolicy.mk
 include device/qcom/sepolicy-legacy-um/SEPolicy.mk
 BOARD_VENDOR_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/vendor
 PRODUCT_PRIVATE_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/private
 PRODUCT_PUBLIC_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/public
 
 # Treble
-PRODUCT_FULL_TREBLE_OVERRIDE := true
 BOARD_VNDK_VERSION := current
 
 # Wifi
